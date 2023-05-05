@@ -26,5 +26,5 @@ Function Test-Call () {
                 method = $method
                 params = $params
             }
-            Return Cove-APIcall -body $reqBody -raw -verbose
+            Return Invoke-CoveAPIcall -body $reqBody -raw -verbose
     }

@@ -84,9 +84,9 @@ Function Get-AllCoveDevices () {
                     Computer_Make = $q.settings.I44 | Filter-Null
                     Computer_Model = $q.settings.I45 | Filter-Null
                     Timestamp_epoch = $q.settings.I6 | Filter-Null
-                    TimeStamp = ($q.settings.I6 | Filter-Null | FromEpoch) + $var.timeZoneOffset
+                    TimeStamp = ($q.settings.I6 | Filter-Null | FromEpoch) + $script:timeZoneOffset
                     LastSession_Status = $T0_Statuses[($q.settings.T0 | Filter-Null)]
-                    LastSession_TimeStamp = ($q.settings.TL | Filter-Null | FromEpoch) + $var.timeZoneOffset
+                    LastSession_TimeStamp = ($q.settings.TL | Filter-Null | FromEpoch) + $script:timeZoneOffset
                     Errors = $q.settings.T7 | Filter-Null
                 }
             }

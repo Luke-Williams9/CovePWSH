@@ -28,12 +28,17 @@ Function Invoke-CoveAPIcall () {
         Write-Verbose ("Method :: " + $body.method)
         Write-Verbose "Using Partner info:"
         Write-Verbose $partnerInfo | FL
-        
-        $webReq = $coveParams
+        $webReq =  @{
+            Method = 'POST'
+            ContentType = 'application/json'
+            Body = @{}
+            URI = "https://api.backup.management/jsonapi"
+            SessionVariable = 'WebSession'
+            UseBasicParsing = $true
+        }
         $body.jsonrpc = '2.0'
         $body.id = '2'
         $body.visa = $visa
-        
         $webReq.Body = $body | ConvertTo-JSON -depth 100
         Write-Verbose "Request Body JSON:"
         Write-Verbose $webReq.Body
