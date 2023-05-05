@@ -34,17 +34,23 @@ Function Connect-Cove () {
             [Parameter(Mandatory=$true)][string]$id,
             [Parameter(Mandatory=$true)][string]$secret
         )
-        $webReq = $coveParams
-        $webReq.Body = @{
-            jsonrpc = '2.0'
-            id = '2'
-            method = 'Login'
-            params = @{
-                partner = $partnerName
-                username = $id
-                password = $secret
-            }
-        } | ConvertTo-JSON -depth 100
+        $webReq =  @{
+            Method = 'POST'
+            ContentType = 'application/json'
+            Body = @{
+                jsonrpc = '2.0'
+                id = '2'
+                method = 'Login'
+                params = @{
+                    partner = $partnerName
+                    username = $id
+                    password = $secret
+                }
+            } | ConvertTo-JSON -depth 100
+            URI = "https://api.backup.management/jsonapi"
+            SessionVariable = 'WebSession'
+            UseBasicParsing = $true
+        } 
         $result = Invoke-WebRequest @webReq | ConvertFrom-JSON -depth 100
         $cookies = $webSession.Cookies.GetCookies($webReq.URI)
         if (!$result.visa) {

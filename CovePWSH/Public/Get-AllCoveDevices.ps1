@@ -57,11 +57,6 @@ Function Get-AllCoveDevices () {
                 }
             }
         }
-        Function Filter-Null () {
-            [cmdletBinding()]
-            param ( [Parameter(ValueFromPipeline=$true)]$in )
-            Process { Return $out = $in | where {$_ -ne $null} }
-        }
         $result = @()
         Do {
             $reqBody.params.query.StartRecordNumber = $recordNum
@@ -84,9 +79,9 @@ Function Get-AllCoveDevices () {
                     Computer_Make = $q.settings.I44 | Filter-Null
                     Computer_Model = $q.settings.I45 | Filter-Null
                     Timestamp_epoch = $q.settings.I6 | Filter-Null
-                    TimeStamp = ($q.settings.I6 | Filter-Null | FromEpoch) + $script:timeZoneOffset
+                    TimeStamp = ($q.settings.I6 | Filter-Null | Convert-FromEpoch) + $script:timeZoneOffset
                     LastSession_Status = $T0_Statuses[($q.settings.T0 | Filter-Null)]
-                    LastSession_TimeStamp = ($q.settings.TL | Filter-Null | FromEpoch) + $script:timeZoneOffset
+                    LastSession_TimeStamp = ($q.settings.TL | Filter-Null | Convert-FromEpoch) + $script:timeZoneOffset
                     Errors = $q.settings.T7 | Filter-Null
                 }
             }

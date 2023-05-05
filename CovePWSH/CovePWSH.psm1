@@ -1,8 +1,23 @@
-$scriptRoot = $PSScriptRoot + '\public'
+<#$scriptRoot = $PSScriptRoot + '\public'
 
 Get-ChildItem $scriptRoot *.ps1 | ForEach-Object {
     Import-Module $_.FullName
 }
+#>
+
+# Get a list of the included scripts and import them
+$ModulePath = Split-Path $MyInvocation.MyCommand.Path -Parent
+$Public  = @( Get-ChildItem -Path $ModulePath\Public\*.ps1 -ErrorAction SilentlyContinue )
+$Private = @( Get-ChildItem -Path $ModulePath\Private\*.ps1 -ErrorAction SilentlyContinue )
+Foreach($import in @($Public + $Private)) {
+    Try {
+        . $import.fullname
+    }
+    Catch {
+        Write-Error -Message "Failed to import function $($import.fullname): $_"
+    }
+}
+Export-ModuleMember -Function $Public.Basename
 
 $Script:partnerName = "Global Storm IT (emmanuel@globalstormit.com)"
 $Script:partnerInfo = '' # partner info is updated by function Connect-Cove
