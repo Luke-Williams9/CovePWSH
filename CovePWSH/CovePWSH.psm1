@@ -1,10 +1,3 @@
-<#$scriptRoot = $PSScriptRoot + '\public'
-
-Get-ChildItem $scriptRoot *.ps1 | ForEach-Object {
-    Import-Module $_.FullName
-}
-#>
-
 # Get a list of the included scripts and import them
 $ModulePath = Split-Path $MyInvocation.MyCommand.Path -Parent
 $Public  = @( Get-ChildItem -Path $ModulePath\Public\*.ps1 -ErrorAction SilentlyContinue )
