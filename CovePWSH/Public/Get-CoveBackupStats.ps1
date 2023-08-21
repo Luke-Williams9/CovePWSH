@@ -1,7 +1,7 @@
 Function Get-CoveBackupStats () {
     <#
         .SYNOPSIS
-        Returns the stats from the Cove Dashboard
+        Returns the stats from the Cove Dashboard. test
         
         .DESCRIPTION
         Pulled this call straight outta the web gui dashboard lol
