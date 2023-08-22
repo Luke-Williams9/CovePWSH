@@ -16,7 +16,8 @@ Function Get-AllCoveDevices () {
             Get-AllCoveDevices
         #>
         [cmdletBinding()]
-        
+        Write-Host "Statuses: T0_Statuses"
+        Write-Host "OS Types: $I32_OStypes"
         <#
         I0 Device ID 
         I18 Computer Name
@@ -58,6 +59,7 @@ Function Get-AllCoveDevices () {
             }
         }
         $result = @()
+        $ErrorActionPreference = 'Continue'
         Do {
             $reqBody.params.query.StartRecordNumber = $recordNum
             $query = Invoke-CoveAPIcall -body $reqBody # -verbose
@@ -66,6 +68,20 @@ Function Get-AllCoveDevices () {
                 if ($q.Flags -eq $null) {
                     Continue
                 }
+                
+                # catch null values for these two, set them to 0 by default
+                $ostyp = $q.settings.I32 | Filter-Null
+                if ($ostyp -isnot [int]) {
+                    $ostyp = 0
+                }
+                $OS_Type = $I32_OStypes[$ostyp]
+                
+                $stat = $q.settings.T0 | Filter-Null
+                if ($stat -isnot [int]) {
+                    $stat = 0
+                }
+                $LastSession_Status = $T0_Statuses[$stat]
+
                 $result += [PSCustomObject] @{
                     DeviceID = $q.settings.I0 | Filter-Null
                     HostName = $q.settings.I18 | Filter-Null
@@ -75,13 +91,13 @@ Function Get-AllCoveDevices () {
                     MAC_Addresses = ($q.settings.I21 | Filter-Null) -split(';')
                     DeviceName = $q.settings.I1 | Filter-Null
                     DeviceAlias = $q.settings.I2 | Filter-Null
-                    OS_Type = $I32_OStypes[($q.settings.I32 | Filter-Null)]
+                    OS_Type = $OS_Type
                     Computer_Make = $q.settings.I44 | Filter-Null
                     Computer_Model = $q.settings.I45 | Filter-Null
                     Timestamp_epoch = $q.settings.I6 | Filter-Null
-                    TimeStamp = ($q.settings.I6 | Filter-Null | Convert-FromEpoch) + $script:timeZoneOffset
-                    LastSession_Status = $T0_Statuses[($q.settings.T0 | Filter-Null)]
-                    LastSession_TimeStamp = ($q.settings.TL | Filter-Null | Convert-FromEpoch) + $script:timeZoneOffset
+                    TimeStamp = ($q.settings.I6 | Filter-Null | Convert-FromEpoch)
+                    LastSession_Status = $LastSession_Status
+                    LastSession_TimeStamp = ($q.settings.TL | Filter-Null | Convert-FromEpoch)
                     Errors = $q.settings.T7 | Filter-Null
                 }
             }

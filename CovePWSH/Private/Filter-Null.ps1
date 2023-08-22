@@ -4,6 +4,12 @@ Function Filter-Null () {
         [Parameter(ValueFromPipeline=$true)]$in 
     )
     Process { 
-        Return $out = $in | where {$_ -ne $null} 
+        Try {
+            $out = $in | where {$_ -ne $null} 
+        }
+        Catch {
+            $out = 'Filter-Null error'
+        }
+        Return $out
     }
 }

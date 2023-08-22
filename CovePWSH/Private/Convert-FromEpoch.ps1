@@ -22,5 +22,11 @@ function Convert-FromEpoch () {
         param (
             [parameter(ValueFromPipeline,ValueFromPipelineByPropertyName)][string]$unixTIme
         )
-    Return (Get-Date 01.01.1970)+([System.TimeSpan]::fromseconds($unixTime))
+    Try {
+        $a = (Get-Date 01.01.1970)+([System.TimeSpan]::fromseconds($unixTime))
+    }
+    Catch {
+        $a = $unixTime
+    }
+    Return $a
 }
