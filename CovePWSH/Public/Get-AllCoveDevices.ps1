@@ -16,8 +16,8 @@ Function Get-AllCoveDevices () {
             Get-AllCoveDevices
         #>
         [cmdletBinding()]
-        Write-Host "Statuses: T0_Statuses"
-        Write-Host "OS Types: $I32_OStypes"
+        
+        param ()
         <#
         I0 Device ID 
         I18 Computer Name
@@ -41,6 +41,9 @@ Function Get-AllCoveDevices () {
 
         #>
 
+        Write-Host "Statuses: $T0_Statuses"
+        Write-Host "OS Types: $I32_OStypes"
+        
 
         $recordCount = 200
         $recordNum = 0
